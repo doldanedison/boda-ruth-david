@@ -7,6 +7,7 @@
  */
 const CLAVE_ORGANIZADOR = "CAMBIAR-ESTA-CLAVE";
 const SHEET_ID = "";            // vacío = la planilla que contiene este script
+const NOMBRE_PLANILLA = "Invitados Boda Ruth y David";
 const HOJA = "Invitados";
 const HOJA_CFG = "Config";
 const COLS = ["id", "nombre", "telefono", "acompanantes", "asistiran", "estado", "mensaje", "actualizado", "integrantes", "quienes"];
@@ -25,6 +26,7 @@ function doGet(e) {
       case "borrar": auth(p); return out(borrar(p.id));
       case "reiniciar": auth(p); return out(reiniciar(p.id));
       case "guardarconfig": auth(p); return out(guardarConfig(p));
+      case "preparar": auth(p); return out(preparar());
       default: return out({ ok: false, error: "Acción inválida" });
     }
   } catch (err) {
@@ -35,6 +37,15 @@ function doGet(e) {
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 function auth(p) { if (p.clave !== CLAVE_ORGANIZADOR) throw new Error("Clave incorrecta"); }
 function libro() { return SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet(); }
+
+// Deja la planilla lista: le pone nombre, crea las hojas y quita la hoja vacía inicial.
+function preparar() {
+  const ss = libro();
+  ss.rename(NOMBRE_PLANILLA);
+  hoja(); hojaCfg();
+  ss.getSheets().forEach(s => { if (["Hoja 1", "Sheet1"].indexOf(s.getName()) >= 0) ss.deleteSheet(s); });
+  return { ok: true, nombre: ss.getName(), hojas: ss.getSheets().map(s => s.getName()) };
+}
 
 function hoja() {
   const ss = libro();
