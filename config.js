@@ -1,7 +1,7 @@
 // Datos de la boda. Es el único archivo que hay que tocar para cambiar textos básicos.
 window.BODA = {
   // URL del backend (Google Apps Script). Vacío = modo demo (los datos quedan en este navegador).
-  API_URL: "",
+  API_URL: "https://script.google.com/macros/s/AKfycbzDiiURBtdfHWs1-FeU4dpJg_JU0B24ByKlyzvewBdO1vdh6lz8p28JlGJhEgiikHDbzQ/exec",
 
   novia: "Ruth",
   novio: "David",
