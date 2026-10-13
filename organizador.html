@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Invitados · Boda de Ruth &amp; David</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%231f2c4c'/><text x='50' y='66' text-anchor='middle' font-family='Georgia,serif' font-size='44' fill='%23e6c988'>R·D</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261013a">
+<style>
+  .top{background:linear-gradient(170deg,#243459,var(--navy-d));color:#fff;padding:24px 18px 20px;border-radius:0 0 26px 26px}
+  .top h1{font-size:27px;font-weight:600}.top p{opacity:.85;font-size:13px;margin-top:2px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:16px}
+  .stats div{background:#ffffff1c;border:1px solid #ffffff22;border-radius:14px;padding:9px 2px;text-align:center}
+  .stats b{display:block;font-family:var(--serif);font-size:25px;color:var(--gold-l);line-height:1.1}.stats span{font-size:10px;opacity:.9;line-height:1.25;display:block}
+  .pbox{margin:14px 14px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
+  .pbox h2{font-size:22px;color:var(--navy);margin-bottom:10px;font-weight:600}
+  .grid2{display:grid;grid-template-columns:1fr 110px;gap:10px}
+  .tabs{display:flex;gap:6px;margin:0 14px;overflow-x:auto;padding-bottom:4px}
+  .tabs button{flex:none;background:#fff;border:1.5px solid var(--line);border-radius:30px;padding:7px 13px;font-size:13px;color:var(--ink)}
+  .tabs button.on{border-color:var(--navy);background:var(--navy);color:#fff}
+  .g{display:flex;align-items:flex-start;gap:8px;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .g:last-child{border:0}
+  .g .n{flex:1;min-width:0}.g .n b{display:block;font-weight:600;overflow-wrap:anywhere}.g .n small{color:var(--soft);font-size:12px;display:block;line-height:1.4}
+  .tag{font-size:10px;font-weight:600;padding:4px 8px;border-radius:10px;white-space:nowrap;letter-spacing:.04em}
+  .PENDIENTE{background:#fff3cd;color:#8a6d1a}.CONFIRMADO{background:#e7f4e4;color:#4d7a45}.NO{background:#fde8ec;color:#a4475d}
+  .mini{background:#f4f5f9;border-radius:10px;width:34px;height:34px;font-size:15px;flex:none}
+  .btn-sm{background:var(--navy);color:#fff;border-radius:14px;padding:13px;width:100%;font-weight:600;font-size:14px;margin-top:10px;letter-spacing:.04em}
+  .btn-sm.alt{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn-sm:disabled{opacity:.55}
+  .search{margin:10px 14px 0}
+  .muted{color:var(--soft);font-size:13px;line-height:1.45}
+  textarea.bulk{min-height:110px;font-size:15px}
+  .it{display:grid;grid-template-columns:84px 1fr 34px;gap:6px;margin-bottom:6px;align-items:start}
+  .it input{padding:11px 10px;font-size:15px}
+  .it .det{grid-column:2/3}
+  details summary{cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script src="config.js?v=20261013a"></script>
+<script src="api.js?v=20261013a"></script>
+<script>
+const B = window.BODA, $ = s => document.querySelector(s), app = $("#app");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+let clave = "", lista = [], itin = [], filtro = "TODOS", texto = "";
+try { clave = sessionStorage.getItem("boda_clave") || ""; } catch { }
+
+function login(msg = "") {
+  app.innerHTML = `
+    <div class="top"><h1>Panel del organizador</h1><p>Boda de ${esc(B.novia)} &amp; ${esc(B.novio)}</p></div>
+    <div class="pbox">
+      <h2>Ingresá la clave</h2>
+      ${API.demo() ? '<p class="msg inf">Modo demo: cualquier clave sirve y los datos quedan solo en este navegador.</p>' : ""}
+      <form id="lf"><input type="text" id="k" autocomplete="off" placeholder="Clave del organizador" required>
+      ${msg}<button class="btn-sm">Entrar</button></form>
+    </div>`;
+  $("#lf").onsubmit = async e => {
+    e.preventDefault(); clave = $("#k").value.trim();
+    try { await cargar(); try { sessionStorage.setItem("boda_clave", clave); } catch { } }
+    catch (err) { clave = ""; login(`<div class="msg err">${esc(err.message)}</div>`); }
+  };
+}
+
+async function cargar() {
+  const [l, c] = await Promise.all([API.listar(clave), API.config().catch(() => ({ itinerario: null }))]);
+  lista = l; itin = Array.isArray(c.itinerario) ? c.itinerario : (B.itinerario || []);
+  render();
+}
+
+const lugaresDe = g => +g.acompanantes + 1;
+
+function render() {
+  const conf = lista.filter(g => g.estado === "CONFIRMADO");
+  const lugares = lista.reduce((a, g) => a + lugaresDe(g), 0);
+  const asisten = conf.reduce((a, g) => a + +g.asistiran, 0);
+  const pend = lista.filter(g => g.estado === "PENDIENTE");
+  const no = lista.filter(g => g.estado === "NO ASISTE").length;
+  const vis = lista.filter(g => (filtro === "TODOS" || g.estado === filtro) && (!texto || API.norm(g.nombre + " " + g.integrantes).includes(API.norm(texto))))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+  app.innerHTML = `
+    <div class="top">
+      <h1>Invitados</h1><p>Boda de ${esc(B.novia)} &amp; ${esc(B.novio)} · ${esc(B.fechaTexto)}</p>
+      <div class="stats"><div><b>${lista.length}</b><span>invitaciones<br>${lugares} lugares</span></div>
+      <div><b>${asisten}</b><span>personas<br>confirmadas</span></div>
+      <div><b>${pend.length}</b><span>sin responder<br>${pend.reduce((a, g) => a + lugaresDe(g), 0)} lugares</span></div>
+      <div><b>${no}</b><span>no<br>asisten</span></div></div>
+    </div>
+
+    <div class="pbox">
+      <h2 id="ft">Agregar invitación</h2>
+      <form id="af">
+        <input type="hidden" id="gid">
+        <label class="lbl">Titular (a nombre de quién va)</label>
+        <input type="text" id="gn" required placeholder="Ej.: Juan Pérez">
+        <label class="lbl" style="margin-top:10px">Acompañantes con nombre (opcional, separados por coma)</label>
+        <input type="text" id="gi" placeholder="Ej.: María Pérez, Luis Pérez">
+        <div class="grid2" style="margin-top:10px">
+          <div><label class="lbl">Teléfono (opcional)</label><input type="tel" id="gt" placeholder="0981…"></div>
+          <div><label class="lbl">Acompañantes</label><input type="number" id="ga" min="0" max="20" value="0" required></div>
+        </div>
+        <p class="muted" style="margin-top:8px">«Acompañantes» es la cantidad total además del titular. Si escribís nombres, se cuentan solos; subí el número si además hay acompañantes sin nombre.</p>
+        <div id="aviso"></div>
+        <button class="btn-sm" id="sv">Guardar</button>
+        <button type="button" class="link" id="cx" hidden>Cancelar edición</button>
+      </form>
+      <details style="margin-top:12px"><summary class="muted">Cargar varias de una vez</summary>
+        <p class="muted" style="margin:8px 0">Una invitación por línea: <b>Titular; acompañantes con nombre; cantidad</b>. Las dos últimas partes son opcionales.</p>
+        <textarea class="bulk" id="bulk" placeholder="María González&#10;Carlos Benítez; Ana Benítez, Luis Benítez&#10;Familia Rojas; ; 3"></textarea>
+        <button class="btn-sm" id="bk">Agregar todas</button>
+      </details>
+    </div>
+
+    <div class="pbox">
+      <details ${itin.length ? "" : "open"}><summary><h2 style="display:inline">Itinerario</h2> <span class="muted">(${itin.length ? itin.length + " momentos" : "sin cargar"})</span></summary>
+        <p class="muted" style="margin:10px 0">Es lo que ven los invitados en la sección «Itinerario». Mientras esté vacío, ven «Muy pronto vamos a compartir el itinerario».</p>
+        <div id="its"></div>
+        <button type="button" class="btn-sm alt" id="itAdd">+ Agregar momento</button>
+        ${itin.length ? "" : '<button type="button" class="link" id="itEj">Cargar un ejemplo para editar</button>'}
+        <div id="itAviso"></div>
+        <button type="button" class="btn-sm" id="itSave">Guardar itinerario</button>
+      </details>
+    </div>
+
+    <div class="tabs">${["TODOS", "PENDIENTE", "CONFIRMADO", "NO ASISTE"].map(f => `<button data-f="${f}" class="${f === filtro ? "on" : ""}">${f[0] + f.slice(1).toLowerCase()}</button>`).join("")}
+      <button id="rf">↻ Actualizar</button></div>
+    <div class="search"><input type="text" id="se" placeholder="Buscar en la lista…" value="${esc(texto)}"></div>
+    <div class="pbox" style="padding:4px 16px">
+      ${vis.length ? vis.map(g => `
+        <div class="g">
+          <div class="n"><b>${esc(g.nombre)}</b>
+            ${g.integrantes ? `<small>con ${esc(g.integrantes)}</small>` : ""}
+            <small>${g.estado === "CONFIRMADO" ? `vienen ${g.asistiran} de ${lugaresDe(g)}${g.quienes && lugaresDe(g) > 1 ? ": " + esc(g.quienes) : ""}` : `${lugaresDe(g)} ${lugaresDe(g) === 1 ? "lugar" : "lugares"}`}${g.telefono ? " · " + esc(g.telefono) : ""}</small>
+            ${g.mensaje ? `<small>💬 ${esc(g.mensaje)}</small>` : ""}
+          </div>
+          <span class="tag ${g.estado.split(" ")[0]}">${g.estado}</span>
+          <button class="mini" data-e="${esc(g.id)}" title="Editar">✎</button>
+          <button class="mini" data-d="${esc(g.id)}" title="Borrar">🗑</button>
+        </div>`).join("") : '<p class="muted" style="padding:14px 0">No hay invitaciones para mostrar.</p>'}
+    </div>
+    <div style="padding:0 14px 30px"><button class="btn-sm alt" id="csv">⬇ Descargar lista (CSV)</button>
+    <button class="link" id="out">Salir</button></div>`;
+
+  // ---- alta / edición ----
+  $("#af").onsubmit = async e => {
+    e.preventDefault();
+    const esNuevo = !$("#gid").value;
+    $("#sv").disabled = true; $("#sv").textContent = "Guardando…"; $("#aviso").innerHTML = "";
+    try {
+      await API.guardar(clave, { id: $("#gid").value, nombre: $("#gn").value.trim().replace(/\s+/g, " "), integrantes: $("#gi").value, acompanantes: Math.max(0, +$("#ga").value || 0), telefono: $("#gt").value.trim() });
+      await cargar();
+    } catch (err) {
+      $("#sv").disabled = false; $("#sv").textContent = "Guardar";
+      $("#aviso").innerHTML = `<div class="msg err">${esc(err.message)}${esNuevo ? " Si lo volvés a intentar, fijate primero que no haya quedado cargada en la lista de abajo." : " Podés tocar Guardar de nuevo."}</div>`;
+    }
+  };
+  $("#gi").oninput = () => { const n = $("#gi").value.split(",").filter(x => x.trim()).length; if (+$("#ga").value < n) $("#ga").value = n; };
+  $("#bk").onclick = async () => {
+    const rows = $("#bulk").value.split("\n").map(l => l.trim()).filter(Boolean).map(l => {
+      const p = l.split(";").map(x => x.trim());
+      if (p.length === 1) { const m = l.match(/^(.*?)[,\t]\s*(\d+)\s*$/); return m ? { nombre: m[1].trim(), acompanantes: +m[2], integrantes: "" } : { nombre: l, acompanantes: 0, integrantes: "" }; }
+      return { nombre: p[0], integrantes: p[1] || "", acompanantes: +(p[2] || 0) || 0 };
+    }).filter(r => r.nombre);
+    if (!rows.length) return;
+    $("#bk").disabled = true; $("#bk").textContent = "Guardando…";
+    try { await API.importar(clave, rows, (h, t) => $("#bk").textContent = `Guardando… ${h}/${t}`); await cargar(); }
+    catch (err) { alert(err.message + "\n\nRevisá la lista antes de volver a cargar, por si una parte ya quedó guardada."); try { await cargar(); } catch { } }
+  };
+
+  // ---- itinerario ----
+  const pintarIt = () => {
+    $("#its").innerHTML = itin.map((x, i) => `<div class="it" data-i="${i}">
+      <input type="text" data-k="hora" placeholder="19:00" value="${esc(x.hora || "")}" inputmode="numeric">
+      <input type="text" data-k="titulo" placeholder="Ej.: Ceremonia" value="${esc(x.titulo || "")}">
+      <button type="button" class="mini" data-x="${i}" title="Quitar">✕</button>
+      <input type="text" class="det" data-k="detalle" placeholder="Detalle (opcional)" value="${esc(x.detalle || "")}">
+    </div>`).join("") || '<p class="muted" style="margin-bottom:8px">Todavía no hay momentos cargados.</p>';
+    $("#its").querySelectorAll("input").forEach(inp => inp.oninput = () => { itin[+inp.parentElement.dataset.i][inp.dataset.k] = inp.value; });
+    $("#its").querySelectorAll("[data-x]").forEach(b => b.onclick = () => { itin.splice(+b.dataset.x, 1); pintarIt(); });
+  };
+  pintarIt();
+  $("#itAdd").onclick = () => { itin.push({ hora: "", titulo: "", detalle: "" }); pintarIt(); const f = $("#its").querySelectorAll('[data-k="hora"]'); f[f.length - 1].focus(); };
+  $("#itEj") && ($("#itEj").onclick = () => {
+    itin = [{ hora: "19:00", titulo: "Recepción", detalle: "" }, { hora: "19:30", titulo: "Ceremonia", detalle: "" }, { hora: "20:30", titulo: "Brindis y cena", detalle: "" }, { hora: "22:00", titulo: "Vals de los novios", detalle: "" }, { hora: "22:30", titulo: "¡Fiesta!", detalle: "" }];
+    pintarIt(); $("#itAviso").innerHTML = '<div class="msg inf">Es solo un ejemplo: corregí los horarios y tocá «Guardar itinerario» para publicarlo.</div>';
+  });
+  $("#itSave").onclick = async () => {
+    const b = $("#itSave"); b.disabled = true; b.textContent = "Guardando…"; $("#itAviso").innerHTML = "";
+    const limpio = itin.map(x => ({ hora: (x.hora || "").trim(), titulo: (x.titulo || "").trim(), detalle: (x.detalle || "").trim() })).filter(x => x.titulo);
+    try {
+      await API.guardarConfig(clave, { itinerario: limpio }); itin = limpio; pintarIt();
+      $("#itAviso").innerHTML = `<div class="msg ok">${limpio.length ? "Itinerario publicado. Ya lo ven los invitados." : "Itinerario vacío: los invitados ven «Muy pronto…»."}</div>`;
+    } catch (err) { $("#itAviso").innerHTML = `<div class="msg err">${esc(err.message)}</div>`; }
+    b.disabled = false; b.textContent = "Guardar itinerario";
+  };
+
+  // ---- lista ----
+  app.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { filtro = b.dataset.f; render(); });
+  $("#rf").onclick = () => cargar().catch(err => alert(err.message));
+  $("#se").oninput = e => { texto = e.target.value; const p = e.target.selectionStart; render(); const s = $("#se"); s.focus(); s.setSelectionRange(p, p); };
+  app.querySelectorAll("[data-e]").forEach(b => b.onclick = () => {
+    const g = lista.find(x => x.id === b.dataset.e);
+    $("#gid").value = g.id; $("#gn").value = g.nombre; $("#gi").value = g.integrantes || ""; $("#ga").value = g.acompanantes; $("#gt").value = g.telefono || "";
+    $("#ft").textContent = "Editar invitación"; $("#cx").hidden = false;
+    if (g.estado !== "PENDIENTE" && !$("#rs")) $("#cx").insertAdjacentHTML("afterend", `<button type="button" class="link" id="rs">Borrar su respuesta (volver a pendiente)</button>`);
+    $("#rs") && ($("#rs").onclick = async () => { try { await API.reiniciar(clave, g.id); await cargar(); } catch (err) { alert(err.message); } });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("#cx").onclick = render;
+  app.querySelectorAll("[data-d]").forEach(b => b.onclick = async () => {
+    const g = lista.find(x => x.id === b.dataset.d);
+    if (!confirm(`¿Borrar la invitación de ${g.nombre}?`)) return;
+    b.disabled = true;
+    try { await API.borrar(clave, g.id); await cargar(); } catch (err) { b.disabled = false; alert(err.message); }
+  });
+  $("#csv").onclick = () => {
+    const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const csv = "﻿Titular;Integrantes;Teléfono;Acompañantes;Lugares;Asistirán;Quiénes asisten;Estado;Mensaje;Actualizado\n" +
+      lista.map(g => [g.nombre, g.integrantes, g.telefono, g.acompanantes, lugaresDe(g), g.asistiran, g.quienes, g.estado, g.mensaje, g.actualizado].map(q).join(";")).join("\n");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    a.download = "invitados-boda-ruth-david.csv"; a.click();
+  };
+  $("#out").onclick = () => { try { sessionStorage.removeItem("boda_clave"); } catch { } clave = ""; login(); };
+}
+
+clave ? cargar().catch(() => login()) : login();
+</script>
+</body>
+</html>

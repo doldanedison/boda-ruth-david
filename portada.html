@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Portada (plantilla de portada.jpg, 1200x630)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-variant-numeric:lining-nums}
+  #card{position:relative;width:1200px;height:630px;overflow:hidden;background:linear-gradient(160deg,#27385f 0,#1f2c4c 45%,#141d36 100%);color:#fff;text-align:center}
+  .marco{position:absolute;inset:26px;border:1.5px solid #c9a35c;border-radius:6px;opacity:.75}
+  .flor{position:absolute;width:400px}.flor svg{width:100%;height:auto;display:block}
+  .f1{left:-70px;top:-80px}.f2{right:-76px;bottom:-92px;transform:rotate(180deg)}
+  .txt{position:absolute;left:0;right:0;top:118px}
+  .k{font-family:"Cormorant Garamond",serif;text-transform:uppercase;letter-spacing:.42em;font-size:25px;color:#c9a35c;padding-left:.42em}
+  h1{font-family:"Great Vibes",cursive;font-weight:400;font-size:150px;line-height:1.12;text-shadow:0 3px 14px rgba(0,0,0,.3);margin-top:8px}
+  h1 i{font-style:normal;color:#c9a35c;font-size:.62em;margin:0 .12em}
+  .orn{margin:8px auto 18px;display:block}
+  .f{font-family:"Cormorant Garamond",serif;font-size:40px;letter-spacing:.2em;color:#ecd9ae;padding-left:.2em}
+  .l{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:30px;color:#dfe3ee;margin-top:10px}
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="marco"></div>
+  <div class="flor f1" id="f1"></div><div class="flor f2" id="f2"></div>
+  <div class="txt">
+    <div class="k">Nuestra boda</div>
+    <h1 id="n"></h1>
+    <span class="orn" id="orn"></span>
+    <div class="f" id="f"></div>
+    <div class="l" id="l"></div>
+  </div>
+</div>
+<script src="config.js"></script>
+<script src="art.js"></script>
+<script>
+const B = window.BODA, d = new Date(B.fechaISO), p2 = n => String(n).padStart(2, "0");
+const rama = ART.svg(ART.spray(4, 4), "0 0 240 190");
+document.getElementById("f1").innerHTML = rama; document.getElementById("f2").innerHTML = rama;
+document.getElementById("n").innerHTML = `${B.novia} <i>&amp;</i> ${B.novio}`;
+document.getElementById("orn").innerHTML = ART.divider(300);
+document.getElementById("f").textContent = `${p2(d.getDate())} · ${p2(d.getMonth() + 1)} · ${d.getFullYear()}  ·  ${B.horaTexto}`;
+document.getElementById("l").textContent = `${B.lugar} · ${B.ciudad}`;
+</script>
+</body>
+</html>

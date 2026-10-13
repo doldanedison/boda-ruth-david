@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Boda de Ruth &amp; David</title>
+<meta name="description" content="Te invitamos a celebrar nuestra boda · Domingo 15 de noviembre de 2026 · 19:00 hs · Star Recepciones, San Lorenzo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Boda de Ruth &amp; David">
+<meta property="og:locale" content="es_PY">
+<meta property="og:url" content="https://doldanedison.github.io/boda-ruth-david/">
+<meta property="og:title" content="Ruth &amp; David · ¡Nos casamos!">
+<meta property="og:description" content="Domingo 15 de noviembre de 2026 · 19:00 hs · Star Recepciones, San Lorenzo. Tocá para abrir la invitación y confirmar tu asistencia.">
+<meta property="og:image" content="https://doldanedison.github.io/boda-ruth-david/portada.jpg">
+<meta property="og:image:secure_url" content="https://doldanedison.github.io/boda-ruth-david/portada.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Invitación a la boda de Ruth y David">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ruth &amp; David · ¡Nos casamos!">
+<meta name="twitter:description" content="Domingo 15 de noviembre de 2026 · 19:00 hs · Star Recepciones, San Lorenzo.">
+<meta name="twitter:image" content="https://doldanedison.github.io/boda-ruth-david/portada.jpg">
+<meta name="theme-color" content="#1f2c4c">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%231f2c4c'/><text x='50' y='66' text-anchor='middle' font-family='Georgia,serif' font-size='44' fill='%23e6c988'>R·D</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261013a">
+</head>
+<body>
+
+<!-- SOBRE DE INICIO -->
+<div id="intro">
+  <div class="i-top" id="iTop"></div>
+  <button class="env" id="env" aria-label="Abrir la invitación">
+    <span class="env-back"></span>
+    <span class="env-card"><small>Nuestra boda</small><b id="cardNames"></b></span>
+    <span class="env-front" id="envFront"></span>
+    <span class="env-flap"><span id="envFlap"></span><span class="env-names" id="envNames"></span></span>
+    <span class="env-seal" id="envSeal"></span>
+    <span class="env-flor" id="envFlor"></span>
+  </button>
+  <div class="i-bot">Tocá el sobre para abrir</div>
+</div>
+
+<!-- INVITACIÓN -->
+<div class="wrap" id="main">
+  <header class="hero">
+    <div class="flor f1" id="f1"></div><div class="flor f2" id="f2"></div>
+    <div class="kicker">Nuestra boda</div>
+    <h1><span id="hNovia"></span><i>&amp;</i><span id="hNovio"></span></h1>
+    <p class="frase" id="hFrase"></p>
+    <div class="rule"></div>
+    <div class="fecha" id="hFecha"></div>
+  </header>
+
+  <section class="sec reveal" style="padding-top:38px">
+    <p class="lead" id="lead"></p>
+  </section>
+
+  <section class="sec reveal">
+    <h2>¿Cuándo?</h2><span class="orn" data-orn></span>
+    <div class="box">
+      <div class="cal" id="cal"></div>
+      <p class="cuando"><span id="cuandoFecha"></span><br><b id="cuandoHora"></b></p>
+    </div>
+    <p class="cdt" id="cdt">Faltan</p>
+    <div class="cd" id="cd">
+      <div><b id="cdD">0</b><span>días</span></div><div><b id="cdH">00</b><span>horas</span></div>
+      <div><b id="cdM">00</b><span>min</span></div><div><b id="cdS">00</b><span>seg</span></div>
+    </div>
+    <a class="btn btn-line" id="calBtn" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      Agregar a mi calendario</a>
+  </section>
+
+  <section class="sec reveal">
+    <h2>Itinerario</h2><span class="orn" data-orn></span>
+    <div id="itin"></div>
+  </section>
+
+  <section class="sec reveal">
+    <h2>¿Dónde?</h2><span class="orn" data-orn></span>
+    <div class="box lugar">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <b id="lugar"></b><span id="dir"></span>
+      <a class="btn btn-rsvp" id="mapBtn" target="_blank" rel="noopener">Ver ubicación en el mapa</a>
+    </div>
+  </section>
+
+  <section class="sec reveal">
+    <h2>Vestimenta</h2><span class="orn" data-orn></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5V7.2c1.3-.4 2.2-1.4 2.2-2.6a2.2 2.2 0 0 0-4.4 0"/><path d="M12 8.5l8.6 6.2c.9.7.4 2.1-.7 2.1H4.1c-1.1 0-1.6-1.4-.7-2.1L12 8.5z"/></svg>
+    <p class="dress" id="dress"></p>
+  </section>
+
+  <section class="sec reveal">
+    <h2>Regalos</h2><span class="orn" data-orn></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8c-1.4-3.6-5.6-3.4-5-1 .4 1.4 3 1 5 1zm0 0c1.4-3.6 5.6-3.4 5-1-.4 1.4-3 1-5 1z"/></svg>
+    <p class="txt" id="regalos"></p>
+    <div class="alias" id="aliasBox">
+      <small>Alias</small><b id="aliasNum"></b><em id="aliasTit"></em>
+      <button class="btn btn-gold btn-chico" id="copyBtn">Copiar alias</button>
+    </div>
+  </section>
+
+  <section class="rsvp-sec reveal">
+    <h2>Confirmá tu asistencia</h2><span class="orn" data-orn style="display:block;margin:10px auto 14px"></span>
+    <p>Tu presencia hará que este día sea aún más especial.</p>
+    <button class="btn btn-gold" id="rsvpBtn">Confirmar asistencia</button>
+  </section>
+
+  <footer class="foot reveal">
+    <div class="n" id="footNames"></div>
+    <p>¡Te esperamos!</p>
+  </footer>
+</div>
+
+<button class="music" id="music" hidden aria-label="Reproducir música">
+  <svg id="musIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+  <span class="lbl-m">Música</span><span class="eq"><i></i><i></i><i></i></span>
+</button>
+
+<!-- HOJA DE CONFIRMACIÓN -->
+<div class="sheet-bg" id="bg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Confirmar asistencia">
+  <div class="grab"></div>
+  <div id="sheetBody"></div>
+</div>
+
+<script src="config.js?v=20261013a"></script>
+<script src="art.js?v=20261013a"></script>
+<script src="api.js?v=20261013a"></script>
+<script>
+const B = window.BODA, $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fecha = new Date(B.fechaISO);
+const p2 = n => String(n).padStart(2, "0");
+
+// ---------- arte ----------
+const rama = ART.svg(ART.spray(4, 4), "0 0 240 190");
+$("#iTop").innerHTML = esc(B.frase).replace(", ", ",<br>");
+$("#envFront").innerHTML = ART.envFront; $("#envFlap").innerHTML = ART.envFlap;
+$("#envSeal").innerHTML = ART.seal(B.novia[0] + "&amp;" + B.novio[0]);
+$("#envFlor").innerHTML = rama; $("#f1").innerHTML = rama; $("#f2").innerHTML = rama;
+$("#envNames").innerHTML = `${esc(B.novia)} <i>&amp;</i> ${esc(B.novio)}`;
+$("#cardNames").textContent = `${B.novia} & ${B.novio}`;
+document.querySelectorAll("[data-orn]").forEach(e => e.innerHTML = ART.divider(170));
+
+// ---------- textos ----------
+$("#hNovia").textContent = B.novia; $("#hNovio").textContent = B.novio;
+$("#hFrase").textContent = B.frase;
+$("#hFecha").textContent = `${p2(fecha.getDate())} · ${p2(fecha.getMonth() + 1)} · ${fecha.getFullYear()}`;
+$("#lead").textContent = B.invitacion;
+$("#cuandoFecha").textContent = B.fechaTexto; $("#cuandoHora").textContent = B.horaTexto;
+$("#lugar").textContent = B.lugar; $("#dir").textContent = [B.direccion, B.ciudad].filter(Boolean).join(" · ");
+$("#mapBtn").href = B.mapa;
+$("#dress").textContent = B.vestimenta;
+$("#regalos").textContent = B.regalos;
+$("#footNames").textContent = `${B.novia} & ${B.novio}`;
+if (B.alias) { $("#aliasNum").textContent = B.aliasMostrar || B.alias; $("#aliasTit").textContent = B.aliasTitular || ""; }
+else $("#aliasBox").hidden = true;
+$("#copyBtn").onclick = async e => {
+  const b = e.currentTarget;
+  try { await navigator.clipboard.writeText(B.alias); }
+  catch { const t = document.createElement("textarea"); t.value = B.alias; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch { } t.remove(); }
+  b.textContent = "¡Alias copiado!"; setTimeout(() => b.textContent = "Copiar alias", 2200);
+};
+if (API.demo()) document.body.insertAdjacentHTML("beforeend", '<div class="demo-badge">Modo demo · sin conexión a la planilla</div>');
+
+// ---------- calendario del mes ----------
+(function () {
+  const y = fecha.getFullYear(), m = fecha.getMonth(), dia = fecha.getDate();
+  const nm = fecha.toLocaleDateString("es", { month: "long" }), mes = nm[0].toUpperCase() + nm.slice(1) + " " + y;
+  const primero = (new Date(y, m, 1).getDay() + 6) % 7, dias = new Date(y, m + 1, 0).getDate();
+  let h = ["L", "M", "M", "J", "V", "S", "D"].map(d => `<b>${d}</b>`).join("") + "<span></span>".repeat(primero);
+  for (let d = 1; d <= dias; d++) h += d === dia ? `<span class="hoy"><em>${d}</em></span>` : `<span>${d}</span>`;
+  $("#cal").innerHTML = `<div class="mes">${esc(mes)}</div><div class="grid">${h}</div>`;
+})();
+
+// ---------- agregar al calendario ----------
+(function () {
+  const fin = new Date(fecha.getTime() + (B.duracionHoras || 5) * 36e5);
+  const z = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const titulo = `Boda de ${B.novia} & ${B.novio}`, donde = [B.lugar, B.direccion, B.ciudad].filter(Boolean).join(", ");
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//boda//ES", "BEGIN:VEVENT", "UID:boda-" + z(fecha) + "@invitacion",
+      "DTSTAMP:" + z(new Date()), "DTSTART:" + z(fecha), "DTEND:" + z(fin), "SUMMARY:" + titulo, "LOCATION:" + donde.replace(/,/g, "\\,"), "URL:" + B.mapa, "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+    $("#calBtn").href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+    $("#calBtn").setAttribute("download", "boda-ruth-david.ics"); $("#calBtn").removeAttribute("target");
+  } else {
+    $("#calBtn").href = "https://calendar.google.com/calendar/render?" + new URLSearchParams({ action: "TEMPLATE", text: titulo, dates: z(fecha) + "/" + z(fin), location: donde, details: "Ubicación: " + B.mapa });
+  }
+})();
+
+// ---------- cuenta regresiva ----------
+function tick() {
+  const d = fecha - new Date();
+  if (d <= 0) { $("#cdt").textContent = d > -864e5 ? "¡Hoy es el gran día!" : "¡Gracias por acompañarnos!"; $("#cd").style.display = "none"; return; }
+  $("#cdD").textContent = Math.floor(d / 864e5);
+  $("#cdH").textContent = p2(Math.floor(d / 36e5) % 24);
+  $("#cdM").textContent = p2(Math.floor(d / 6e4) % 60);
+  $("#cdS").textContent = p2(Math.floor(d / 1e3) % 60);
+}
+tick(); setInterval(tick, 1000);
+
+// ---------- itinerario (editable desde el panel del organizador) ----------
+function pintarItinerario(it) {
+  $("#itin").innerHTML = it && it.length
+    ? `<ul class="tl">${it.map(x => `<li><time>${esc(x.hora || "")}</time><div><b>${esc(x.titulo)}</b>${x.detalle ? `<small>${esc(x.detalle)}</small>` : ""}</div></li>`).join("")}</ul>`
+    : `<p class="pronto">Muy pronto vamos a compartir el itinerario de la noche.</p>`;
+}
+pintarItinerario(B.itinerario);
+API.config().then(c => { if (c && Array.isArray(c.itinerario)) pintarItinerario(c.itinerario); }).catch(() => { });
+
+// ---------- música ----------
+const bgm = new Audio(); bgm.loop = true; bgm.volume = .75; bgm.preload = "none";
+const mus = $("#music");
+const ICO = { play: '<path d="M8 5v14l11-7z"/>', pause: '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>' };
+let hayMusica = true;
+bgm.addEventListener("error", () => { hayMusica = false; mus.hidden = true; });
+const pintarMus = () => { const on = !bgm.paused; mus.classList.toggle("on", on); $("#musIco").innerHTML = on ? ICO.pause : ICO.play; mus.setAttribute("aria-label", on ? "Pausar música" : "Reproducir música"); };
+bgm.addEventListener("play", pintarMus); bgm.addEventListener("pause", pintarMus);
+const playMusic = () => { if (hayMusica) bgm.play().catch(() => { }); };
+mus.onclick = () => bgm.paused ? playMusic() : bgm.pause();
+bgm.src = "musica.mp3";
+// si todavía no se subió el archivo de música, no mostramos el botón
+fetch("musica.mp3", { method: "HEAD" }).then(r => { if (!r.ok) { hayMusica = false; mus.hidden = true; } }).catch(() => { });
+
+// ---------- sobre ----------
+function reveal() {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+}
+function endIntro() {
+  $("#intro").classList.add("fade");
+  setTimeout(() => $("#intro").remove(), 950);
+  if (hayMusica) mus.hidden = false;
+  reveal();
+}
+$("#env").onclick = () => {
+  if ($("#env").classList.contains("open")) return;
+  $("#env").classList.add("open"); playMusic();
+  setTimeout(endIntro, 2300);
+};
+if (location.hash === "#info") { $("#intro").remove(); if (hayMusica) mus.hidden = false; document.querySelectorAll(".reveal").forEach(el => el.classList.add("in")); }
+
+// ---------- confirmación ----------
+const body = $("#sheetBody");
+const open = () => { $("#bg").classList.add("on"); $("#sheet").classList.add("on"); };
+const close = () => { $("#bg").classList.remove("on"); $("#sheet").classList.remove("on"); };
+$("#bg").onclick = close;
+$("#rsvpBtn").onclick = () => { stepBuscar(); open(); };
+const lugares = g => +g.acompanantes + 1;
+const resumen = g => { const n = lugares(g), con = API.personas(g).slice(1); return (con.length ? "con " + con.join(", ") + " · " : "") + n + (n === 1 ? " lugar" : " lugares"); };
+
+function stepBuscar(msg) {
+  body.innerHTML = `
+    <h2>Confirmar asistencia</h2>
+    <p class="sub">Escribí tu nombre para buscar tu invitación</p>
+    <form id="f">
+      <label class="lbl" for="q">Tu nombre</label>
+      <input type="text" id="q" autocomplete="name" placeholder="Ej.: María o María González" autocapitalize="words" autocorrect="off" required minlength="3">
+      ${msg || ""}
+      <button class="btn btn-rsvp" id="go">Buscar mi invitación</button>
+    </form>
+    <button class="link" type="button" id="cl">Cerrar</button>`;
+  $("#cl").onclick = close;
+  setTimeout(() => $("#q") && $("#q").focus(), 350);
+  $("#f").onsubmit = async e => {
+    e.preventDefault();
+    const q = $("#q").value.trim();
+    if (!API.norm(q)) return stepBuscar(`<div class="msg err">Por favor escribí tu <b>nombre</b>.</div>`);
+    $("#go").innerHTML = '<span class="spin"></span> Buscando…'; $("#go").disabled = true;
+    try {
+      const r = await API.buscar(q);
+      if (!r.length) return stepBuscar(`<div class="msg err">No encontramos <b>${esc(q)}</b> en la lista. Probá escribiendo <b>solo tu nombre</b> (o solo tu apellido), o el nombre de quien recibió la invitación. Si sigue sin aparecer, escribile a ${esc(B.novia)} o a ${esc(B.novio)}.</div>`);
+      const exactos = r.filter(g => g.exacto);
+      if (exactos.length === 1) return stepConfirmar(exactos[0]);   // una sola coincidencia exacta: directo
+      body.innerHTML = `<h2>${r.length === 1 ? "¿Es esta tu invitación?" : "¿Cuál es tu invitación?"}</h2>
+        <p class="sub">${r.length === 1 ? "Encontramos un nombre parecido. Tocalo si es la tuya" : "Tocá la que corresponde"}</p>
+        ${r.map((g, i) => `<button class="pick" data-i="${i}">${esc(g.nombre)}<small>${esc(resumen(g))}</small></button>`).join("")}
+        <button class="link" id="bk">No es ninguna · buscar de nuevo</button>`;
+      body.querySelectorAll(".pick").forEach(b => b.onclick = () => stepConfirmar(r[+b.dataset.i]));
+      $("#bk").onclick = () => stepBuscar();
+    } catch (err) { stepBuscar(`<div class="msg err">${esc(err.message)}</div>`); }
+  };
+}
+
+function stepConfirmar(g) {
+  const max = lugares(g);
+  // personas de la invitación: las que tienen nombre + "Acompañante" para los lugares sin nombre
+  const pers = API.personas(g).slice(0, max);
+  for (let i = pers.length, k = 1; i < max; i++, k++) pers.push(max - API.personas(g).length > 1 ? "Acompañante " + k : "Acompañante");
+  const antes = g.estado === "CONFIRMADO" && g.quienes ? g.quienes.split(",").map(x => x.trim()) : null;
+  const marcado = (n, i) => antes ? antes.includes(n) : (g.estado === "CONFIRMADO" ? i < g.asistiran : true);
+  const prev = g.estado === "CONFIRMADO" ? `<div class="msg inf">Ya habías confirmado <b>${g.asistiran}</b> ${g.asistiran == 1 ? "persona" : "personas"}. Podés modificarlo.</div>`
+    : g.estado === "NO ASISTE" ? `<div class="msg inf">Habías indicado que no podías asistir. Podés cambiarlo.</div>` : "";
+  body.innerHTML = `
+    <div class="guest-card">
+      <div class="gn">${esc(g.nombre)}</div>
+      <p>${max > 1 ? `Tu invitación es para <b>${max} personas</b>` : "Tu invitación es <b>personal</b>"}</p>
+    </div>
+    ${prev}
+    ${max > 1 ? `<label class="lbl">¿Quiénes van a asistir?</label>
+      ${pers.map((n, i) => `<label class="pers"><input type="checkbox" data-n="${esc(n)}" ${marcado(n, i) ? "checked" : ""}><span>${esc(n)}</span></label>`).join("")}
+      <p class="hint" id="cuenta"></p>` : ""}
+    <label class="lbl" for="ms" style="margin-top:16px">Mensaje para los novios (opcional)</label>
+    <textarea id="ms" rows="2" maxlength="300" placeholder="¡Felicidades!"></textarea>
+    <button class="btn btn-rsvp" id="ok">Confirmar asistencia</button>
+    <button class="link" id="no">${max > 1 ? "No podremos asistir" : "No podré asistir"}</button>
+    <button class="link" id="bk">Volver</button>`;
+  const cajas = [...body.querySelectorAll(".pers input")];
+  const elegidos = () => cajas.filter(c => c.checked).map(c => c.dataset.n);
+  const upd = () => {
+    if (max <= 1) return;
+    const n = elegidos().length;
+    cajas.forEach(c => c.parentElement.classList.toggle("si", c.checked));
+    $("#cuenta").textContent = n ? `Asisten ${n} de ${max}` : "Marcá quiénes van, o tocá «No podremos asistir»";
+    $("#ok").disabled = !n; $("#ok").style.opacity = n ? 1 : .45;
+  };
+  cajas.forEach(c => c.onchange = upd); upd();
+  $("#bk").onclick = () => stepBuscar();
+  const send = async (quienes, btn) => {
+    btn.disabled = true; const t = btn.innerHTML; btn.innerHTML = '<span class="spin"></span> Enviando…';
+    try {
+      await API.confirmar(g.id, quienes.length, $("#ms").value.trim(), quienes.join(", "));
+      stepListo(g, quienes.length);
+    } catch (e) {
+      btn.disabled = false; btn.innerHTML = t;
+      body.querySelectorAll(".msg.err").forEach(x => x.remove());
+      body.insertAdjacentHTML("afterbegin", `<div class="msg err">${esc(e.message)}</div>`);
+    }
+  };
+  $("#ok").onclick = e => send(max > 1 ? elegidos() : [g.nombre], e.currentTarget);
+  $("#no").onclick = e => { if (confirm("¿Confirmás que no vas a poder asistir?")) send([], e.currentTarget); };
+}
+
+function stepListo(g, cant) {
+  const anillos = '<svg viewBox="0 0 64 64" fill="none" stroke="#c9a35c" stroke-width="3"><circle cx="24" cy="36" r="15"/><circle cx="40" cy="36" r="15"/><path d="M20 12l4-5 4 5-4 4z" fill="#ecd9ae" stroke-width="2"/></svg>';
+  body.innerHTML = cant > 0 ? `
+    <div class="big-ok">${anillos}</div>
+    <h2>¡Gracias por confirmar!</h2>
+    <p class="sub">Confirmaste <b>${cant}</b> ${cant == 1 ? "lugar" : "lugares"}.<br>Te esperamos el <b>${esc(B.fechaTexto[0].toLowerCase() + B.fechaTexto.slice(1))}</b> a las ${esc(B.horaTexto)}, en ${esc(B.lugar)}.</p>
+    <a class="btn btn-line" href="${esc(B.mapa)}" target="_blank" rel="noopener">Cómo llegar</a>
+    <button class="link" id="cl">Cerrar</button>` : `
+    <h2>¡Gracias por avisar!</h2>
+    <p class="sub">Te vamos a extrañar. Si cambian tus planes, podés volver a confirmar desde esta misma página.</p>
+    <button class="link" id="cl">Cerrar</button>`;
+  $("#cl").onclick = close;
+  if (cant > 0) confetti();
+}
+
+function confetti() {
+  const cols = ["#c9a35c", "#ecd9ae", "#ffffff", "#1f2c4c", "#e6c988", "#f4efe3"];
+  for (let i = 0; i < 70; i++) {
+    const c = document.createElement("i"); c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw"; c.style.background = cols[i % cols.length];
+    c.style.animationDuration = 2 + Math.random() * 2.5 + "s"; c.style.animationDelay = Math.random() * .6 + "s";
+    c.style.borderRadius = Math.random() > .5 ? "50%" : "2px";
+    document.body.appendChild(c); setTimeout(() => c.remove(), 5500);
+  }
+}
+</script>
+</body>
+</html>
