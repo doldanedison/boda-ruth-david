@@ -59,7 +59,20 @@ window.ART = (function () {
   const envFlap = `<svg viewBox="0 0 300 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0 0 H300 L150 120Z" fill="#1f2c4c"/><path d="M0 0 L150 120 L300 0" fill="none" stroke="#141d36" stroke-width="1.2" opacity=".7"/></svg>`;
 
+  // Ejemplo de vestimenta elegante para los invitados: vestido largo de fiesta y traje
+  const vestimenta = `<svg viewBox="0 0 140 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ejemplo de vestimenta elegante: vestido largo de fiesta y traje">
+    <defs><linearGradient id="gala" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6c988"/><stop offset="1" stop-color="#c9a35c"/></linearGradient></defs>
+    <g fill="#1f2c4c"><ellipse cx="92" cy="18" rx="8.5" ry="9.5"/>
+      <path d="M83 26c-1 3 0 6 2 8l14 0c2-2 3-5 2-8-5 2-13 2-18 0z"/>
+      <path d="M76 36c6-4 26-4 32 0 3 3 4 8 3 14l-3 32c-1 6-2 10-4 13l-1 60h-8l-4-56-3 56h-8l-1-58c-3-4-5-10-5-16l-1-30c0-4 1-7 3-9z"/></g>
+    <path d="M92 33l-6 8 6 22 6-22z" fill="#fffdf9"/><path d="M92 36l-2.2 3 1.4 14 .8 3 .8-3 1.4-14z" fill="#c9a35c"/>
+    <path d="M53 20c-3 6-4 16-2 26l7-4c-1-7-1-14 1-20z" fill="#1f2c4c"/><ellipse cx="61" cy="22" rx="7.6" ry="8.6" fill="#1f2c4c"/>
+    <path d="M57 38c3-2 9-2 12 0 2 1 2 4 1 8l-2 12c-1 3-1 5 0 7 5 14 9 38 11 72 1 6 4 10 8 12-12 4-36 5-52 1 4-3 7-7 8-12 4-30 10-56 15-73 1-3 1-5 0-8l-3-11c-1-3 0-6 2-8z" fill="url(#gala)" stroke="#1f2c4c" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M57 64c4 2 9 2 13 0" stroke="#1f2c4c" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".7"/>
+    <path d="M60 72c-3 24-8 48-12 74M66 72c2 24 5 50 8 74" stroke="#1f2c4c" stroke-width="1" fill="none" opacity=".3"/>
+    <path d="M10 160c34 6 80 5 120-2" stroke="#c9a35c" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`;
+
   const svg = (inner, vb, extra = "") => `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" ${extra}>${defs}${inner}</svg>`;
 
-  return { defs, orchid, bud, leaf, spray, seal, divider, envFront, envFlap, svg };
+  return { defs, orchid, bud, leaf, spray, seal, divider, envFront, envFlap, vestimenta, svg };
 })();

@@ -17,7 +17,7 @@
 ## Cambiar datos
 
 - **Textos, fecha, lugar, alias**: editá `config.js`.
-- **Itinerario**: se edita desde el panel del organizador, sin tocar archivos. Mientras esté vacío, los invitados ven «Muy pronto vamos a compartir el itinerario».
+- **Itinerario**: hoy está oculto (`mostrarItinerario: false` en `config.js`). Si se activa, se edita desde el panel del organizador, sin tocar archivos. Mientras esté vacío, los invitados ven «Muy pronto vamos a compartir el itinerario».
 - **Música**: subí el archivo con el nombre `musica.mp3`.
 
 ## Conectar la planilla de Google

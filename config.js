@@ -7,11 +7,12 @@ window.BODA = {
   novio: "David",
   nombresCompletos: "Ruth Verón & David Urbieta",
   frase: "Dos caminos, un mismo destino",
+  mensaje: "Dios, en su infinita bondad, nos concedió la maravillosa dicha de encontrarnos, de descubrir en el otro un amor verdadero y eterno.",
   invitacion: "Con mucha alegría te invitamos a celebrar nuestra boda",
 
-  fechaISO: "2026-11-15T19:00:00-03:00",
+  fechaISO: "2026-11-15T18:00:00-03:00",
   fechaTexto: "Domingo 15 de noviembre de 2026",
-  horaTexto: "19:00 hs",
+  horaTexto: "18:00 hs",
   duracionHoras: 6,                       // para el botón "Agregar a mi calendario"
 
   lugar: "Star Recepciones",
@@ -21,11 +22,15 @@ window.BODA = {
 
   vestimenta: "Elegante",
 
+  confirmarAntes: "Agradecemos confirmar su asistencia antes del 30 de octubre",
+
   regalos: "Lo más importante para nosotros es tu presencia. Si además querés hacernos un regalo, podés hacerlo con una transferencia a este alias:",
   alias: "4318607",                       // lo que se copia
   aliasMostrar: "4.318.607",              // lo que se ve
   aliasTitular: "",                       // opcional: nombre del titular de la cuenta
 
+  // Itinerario: false = la sección no se muestra (ni en la invitación ni en el panel).
+  mostrarItinerario: false,
   // Itinerario por defecto. Lo que se cargue desde el panel del organizador lo reemplaza.
   itinerario: []
 };

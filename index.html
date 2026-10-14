@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Boda de Ruth &amp; David</title>
-<meta name="description" content="Te invitamos a celebrar nuestra boda · Domingo 15 de noviembre de 2026 · 19:00 hs · Star Recepciones, San Lorenzo">
+<meta name="description" content="Te invitamos a celebrar nuestra boda · Domingo 15 de noviembre de 2026 · 18:00 hs · Star Recepciones, San Lorenzo">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Boda de Ruth &amp; David">
 <meta property="og:locale" content="es_PY">
 <meta property="og:url" content="https://doldanedison.github.io/boda-ruth-david/">
 <meta property="og:title" content="Ruth &amp; David · ¡Nos casamos!">
-<meta property="og:description" content="Domingo 15 de noviembre de 2026 · 19:00 hs · Star Recepciones, San Lorenzo. Tocá para abrir la invitación y confirmar tu asistencia.">
+<meta property="og:description" content="Domingo 15 de noviembre de 2026 · 18:00 hs · Star Recepciones, San Lorenzo. Tocá para abrir la invitación y confirmar tu asistencia.">
 <meta property="og:image" content="https://doldanedison.github.io/boda-ruth-david/portada.jpg">
 <meta property="og:image:secure_url" content="https://doldanedison.github.io/boda-ruth-david/portada.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -19,14 +19,14 @@
 <meta property="og:image:alt" content="Invitación a la boda de Ruth y David">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Ruth &amp; David · ¡Nos casamos!">
-<meta name="twitter:description" content="Domingo 15 de noviembre de 2026 · 19:00 hs · Star Recepciones, San Lorenzo.">
+<meta name="twitter:description" content="Domingo 15 de noviembre de 2026 · 18:00 hs · Star Recepciones, San Lorenzo.">
 <meta name="twitter:image" content="https://doldanedison.github.io/boda-ruth-david/portada.jpg">
 <meta name="theme-color" content="#1f2c4c">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%231f2c4c'/><text x='50' y='66' text-anchor='middle' font-family='Georgia,serif' font-size='44' fill='%23e6c988'>R·D</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261013b">
+<link rel="stylesheet" href="styles.css?v=20261014a">
 </head>
 <body>
 
@@ -50,12 +50,12 @@
     <div class="flor f1" id="f1"></div><div class="flor f2" id="f2"></div>
     <div class="kicker">Nuestra boda</div>
     <h1><span id="hNovia"></span><i>&amp;</i><span id="hNovio"></span></h1>
-    <p class="frase" id="hFrase"></p>
     <div class="rule"></div>
     <div class="fecha" id="hFecha"></div>
   </header>
 
   <section class="sec reveal" style="padding-top:38px">
+    <p class="verso" id="verso"></p>
     <p class="lead" id="lead"></p>
   </section>
 
@@ -65,7 +65,7 @@
       <div class="cal" id="cal"></div>
       <p class="cuando"><span id="cuandoFecha"></span><br><b id="cuandoHora"></b></p>
     </div>
-    <p class="cdt" id="cdt">Faltan</p>
+    <p class="cdt" id="cdt">El gran día comienza dentro de…</p>
     <div class="cd" id="cd">
       <div><b id="cdD">0</b><span>días</span></div><div><b id="cdH">00</b><span>horas</span></div>
       <div><b id="cdM">00</b><span>min</span></div><div><b id="cdS">00</b><span>seg</span></div>
@@ -75,7 +75,7 @@
       Agregar a mi calendario</a>
   </section>
 
-  <section class="sec reveal">
+  <section class="sec reveal" id="secItin">
     <h2>Itinerario</h2><span class="orn" data-orn></span>
     <div id="itin"></div>
   </section>
@@ -91,7 +91,7 @@
 
   <section class="sec reveal">
     <h2>Vestimenta</h2><span class="orn" data-orn></span>
-    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5V7.2c1.3-.4 2.2-1.4 2.2-2.6a2.2 2.2 0 0 0-4.4 0"/><path d="M12 8.5l8.6 6.2c.9.7.4 2.1-.7 2.1H4.1c-1.1 0-1.6-1.4-.7-2.1L12 8.5z"/></svg>
+    <div class="vest" id="vest"></div>
     <p class="dress" id="dress"></p>
   </section>
 
@@ -108,6 +108,7 @@
   <section class="rsvp-sec reveal">
     <h2>Confirmá tu asistencia</h2><span class="orn" data-orn style="display:block;margin:10px auto 14px"></span>
     <p>Tu presencia hará que este día sea aún más especial.</p>
+    <p class="plazo" id="plazo"></p>
     <button class="btn btn-gold" id="rsvpBtn">Confirmar asistencia</button>
   </section>
 
@@ -129,9 +130,9 @@
   <div id="sheetBody"></div>
 </div>
 
-<script src="config.js?v=20261013b"></script>
-<script src="art.js?v=20261013b"></script>
-<script src="api.js?v=20261013b"></script>
+<script src="config.js?v=20261014a"></script>
+<script src="art.js?v=20261014a"></script>
+<script src="api.js?v=20261014a"></script>
 <script>
 const B = window.BODA, $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -150,14 +151,16 @@ document.querySelectorAll("[data-orn]").forEach(e => e.innerHTML = ART.divider(1
 
 // ---------- textos ----------
 $("#hNovia").textContent = B.novia; $("#hNovio").textContent = B.novio;
-$("#hFrase").textContent = B.frase;
 $("#hFecha").textContent = `${p2(fecha.getDate())} · ${p2(fecha.getMonth() + 1)} · ${fecha.getFullYear()}`;
+$("#verso").textContent = B.mensaje || ""; $("#verso").hidden = !B.mensaje;
 $("#lead").textContent = B.invitacion;
 $("#cuandoFecha").textContent = B.fechaTexto; $("#cuandoHora").textContent = B.horaTexto;
 $("#lugar").textContent = B.lugar; $("#dir").textContent = [B.direccion, B.ciudad].filter(Boolean).join(" · ");
 $("#mapBtn").href = B.mapa;
 $("#dress").textContent = B.vestimenta;
+$("#vest").innerHTML = ART.vestimenta;
 $("#regalos").textContent = B.regalos;
+$("#plazo").textContent = B.confirmarAntes || ""; $("#plazo").hidden = !B.confirmarAntes;
 $("#footNames").textContent = `${B.novia} & ${B.novio}`;
 if (B.alias) { $("#aliasNum").textContent = B.aliasMostrar || B.alias; $("#aliasTit").textContent = B.aliasTitular || ""; }
 else $("#aliasBox").hidden = true;
@@ -211,8 +214,11 @@ function pintarItinerario(it) {
     ? `<ul class="tl">${it.map(x => `<li><time>${esc(x.hora || "")}</time><div><b>${esc(x.titulo)}</b>${x.detalle ? `<small>${esc(x.detalle)}</small>` : ""}</div></li>`).join("")}</ul>`
     : `<p class="pronto">Muy pronto vamos a compartir el itinerario de la noche.</p>`;
 }
+if (B.mostrarItinerario === false) $("#secItin").remove();
+else {
 pintarItinerario(B.itinerario);
 API.config().then(c => { if (c && Array.isArray(c.itinerario)) pintarItinerario(c.itinerario); }).catch(() => { });
+}
 
 // ---------- música ----------
 const bgm = new Audio(); bgm.loop = true; bgm.volume = .75; bgm.preload = "none";
