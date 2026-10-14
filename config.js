@@ -6,7 +6,7 @@ window.BODA = {
   novia: "Ruth",
   novio: "David",
   nombresCompletos: "Ruth Verón & David Urbieta",
-  frase: "Dos caminos, un mismo destino",
+  frase: "",                              // texto arriba del sobre (vacío = sin texto)
   mensaje: "Dios, en su infinita bondad, nos concedió la maravillosa dicha de encontrarnos, de descubrir en el otro un amor verdadero y eterno.",
   invitacion: "Con mucha alegría te invitamos a celebrar nuestra boda",
 
