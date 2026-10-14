@@ -230,9 +230,9 @@ const pintarMus = () => { const on = !bgm.paused; mus.classList.toggle("on", on)
 bgm.addEventListener("play", pintarMus); bgm.addEventListener("pause", pintarMus);
 const playMusic = () => { if (hayMusica) bgm.play().catch(() => { }); };
 mus.onclick = () => bgm.paused ? playMusic() : bgm.pause();
-bgm.src = "musica.mp3";
+bgm.src = "musica.mp3?v=2";
 // si todavía no se subió el archivo de música, no mostramos el botón
-fetch("musica.mp3", { method: "HEAD" }).then(r => { if (!r.ok) { hayMusica = false; mus.hidden = true; } }).catch(() => { });
+fetch("musica.mp3?v=2", { method: "HEAD" }).then(r => { if (!r.ok) { hayMusica = false; mus.hidden = true; } }).catch(() => { });
 
 // ---------- sobre ----------
 function reveal() {
