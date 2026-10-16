@@ -99,6 +99,7 @@ window.API = (function () {
   const demo = () => !url();
   const KEY = "boda_ryd_demo", KEY_CFG = "boda_ryd_demo_cfg";
   const norm = bqNorm;
+  const TEXTOS = ["frase", "mensaje", "invitacion", "lugar", "direccion", "ciudad", "mapa", "vestimenta", "regalos", "aliasMostrar", "aliasTitular", "confirmarAntes"];
 
   // La planilla de Google tarda 1-3 segundos en responder; con señal floja el
   // pedido se corta. Reintentamos los pedidos que se pueden repetir sin riesgo.
@@ -187,12 +188,34 @@ window.API = (function () {
     // Configuración editable por el organizador. itinerario = [{hora, titulo, detalle}] o null si nunca se cargó.
     async config() {
       if (!demo()) return (await call({ action: "config" })).config;
-      try { return JSON.parse(localStorage.getItem(KEY_CFG)) || { itinerario: null }; } catch { return { itinerario: null }; }
+      try { return Object.assign({ itinerario: null, textos: null }, JSON.parse(localStorage.getItem(KEY_CFG))); } catch { return { itinerario: null, textos: null }; }
     },
+    // Guarda solo lo que viene: { itinerario } y/o { textos }.
     async guardarConfig(clave, cfg) {
-      if (!demo()) return call({ action: "guardarconfig", clave, itinerario: JSON.stringify(cfg.itinerario || []) });
-      try { localStorage.setItem(KEY_CFG, JSON.stringify({ itinerario: cfg.itinerario || [] })); } catch { }
+      const p = { action: "guardarconfig", clave };
+      if (cfg.itinerario !== undefined) p.itinerario = JSON.stringify(cfg.itinerario || []);
+      if (cfg.textos !== undefined) p.textos = JSON.stringify(cfg.textos || {});
+      if (!demo()) return call(p);
+      let c; try { c = JSON.parse(localStorage.getItem(KEY_CFG)) || {}; } catch { c = {}; }
+      if (cfg.itinerario !== undefined) c.itinerario = cfg.itinerario || [];
+      if (cfg.textos !== undefined) c.textos = cfg.textos || {};
+      try { localStorage.setItem(KEY_CFG, JSON.stringify(c)); } catch { }
       return { ok: true };
+    },
+    textosEditables: TEXTOS,
+    // Pone en B los textos guardados desde el panel, partiendo siempre de los originales de config.js.
+    aplicarTextos(B, textos, orig) {
+      TEXTOS.forEach(k => { B[k] = orig[k]; });
+      B.alias = orig.alias;
+      Object.keys(textos || {}).forEach(k => {
+        if (!TEXTOS.includes(k)) return;
+        const v = String(textos[k] ?? "");
+        if (k === "mapa" && v && !/^https:\/\//.test(v)) return;
+        B[k] = v;
+      });
+      // el alias que se copia: sin puntos si es un número (cédula, teléfono); tal cual si es otra cosa
+      if (textos && textos.aliasMostrar !== undefined) B.alias = /^[\d.\s-]+$/.test(B.aliasMostrar) ? B.aliasMostrar.replace(/\D/g, "") : B.aliasMostrar.trim();
+      return B;
     }
   };
 })();

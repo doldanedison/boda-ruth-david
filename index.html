@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016a">
+<link rel="stylesheet" href="styles.css?v=20261016b">
 </head>
 <body>
 
@@ -130,18 +130,18 @@
   <div id="sheetBody"></div>
 </div>
 
-<script src="config.js?v=20261016a"></script>
-<script src="art.js?v=20261016a"></script>
-<script src="api.js?v=20261016a"></script>
+<script src="config.js?v=20261016b"></script>
+<script src="art.js?v=20261016b"></script>
+<script src="api.js?v=20261016b"></script>
 <script>
 const B = window.BODA, $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ORIG = Object.assign({}, B);      // textos de config.js, antes de aplicar los del panel
 const fecha = new Date(B.fechaISO);
 const p2 = n => String(n).padStart(2, "0");
 
 // ---------- arte ----------
 const rama = ART.svg(ART.spray(4, 4), "0 0 240 190");
-if (B.frase) $("#iTop").innerHTML = esc(B.frase).replace(", ", ",<br>"); else $("#iTop").remove();
 $("#envFront").innerHTML = ART.envFront; $("#envFlap").innerHTML = ART.envFlap;
 $("#envSeal").innerHTML = ART.seal(B.novia[0] + "&amp;" + B.novio[0]);
 $("#envFlor").innerHTML = rama; $("#f1").innerHTML = rama; $("#f2").innerHTML = rama;
@@ -149,21 +149,25 @@ $("#envNames").innerHTML = `${esc(B.novia)} <i>&amp;</i> ${esc(B.novio)}`;
 $("#cardNames").textContent = `${B.novia} & ${B.novio}`;
 document.querySelectorAll("[data-orn]").forEach(e => e.innerHTML = ART.divider(170));
 
-// ---------- textos ----------
+// ---------- textos (los editables se pueden cambiar desde el panel del organizador) ----------
 $("#hNovia").textContent = B.novia; $("#hNovio").textContent = B.novio;
 $("#hFecha").textContent = `${p2(fecha.getDate())} · ${p2(fecha.getMonth() + 1)} · ${fecha.getFullYear()}`;
-$("#verso").textContent = B.mensaje || ""; $("#verso").hidden = !B.mensaje;
-$("#lead").textContent = B.invitacion;
 $("#cuandoFecha").textContent = B.fechaTexto; $("#cuandoHora").textContent = B.horaTexto;
-$("#lugar").textContent = B.lugar; $("#dir").textContent = [B.direccion, B.ciudad].filter(Boolean).join(" · ");
-$("#mapBtn").href = B.mapa;
-$("#dress").textContent = B.vestimenta;
-$("#vest").innerHTML = ART.vestimenta;
-$("#regalos").textContent = B.regalos;
-$("#plazo").textContent = B.confirmarAntes || ""; $("#plazo").hidden = !B.confirmarAntes;
 $("#footNames").textContent = `${B.novia} & ${B.novio}`;
-if (B.alias) { $("#aliasNum").textContent = B.aliasMostrar || B.alias; $("#aliasTit").textContent = B.aliasTitular || ""; }
-else $("#aliasBox").hidden = true;
+$("#vest").innerHTML = ART.vestimenta;
+function pintarTextos() {
+  if ($("#iTop")) { $("#iTop").innerHTML = esc(B.frase || "").replace(", ", ",<br>"); $("#iTop").hidden = !B.frase; }
+  $("#verso").textContent = B.mensaje || ""; $("#verso").hidden = !B.mensaje;
+  $("#lead").textContent = B.invitacion || "";
+  $("#lugar").textContent = B.lugar; $("#dir").textContent = [B.direccion, B.ciudad].filter(Boolean).join(" · ");
+  $("#mapBtn").href = B.mapa;
+  $("#dress").textContent = B.vestimenta;
+  $("#regalos").textContent = B.regalos;
+  $("#plazo").textContent = B.confirmarAntes || ""; $("#plazo").hidden = !B.confirmarAntes;
+  $("#aliasBox").hidden = !B.alias;
+  $("#aliasNum").textContent = B.aliasMostrar || B.alias || ""; $("#aliasTit").textContent = B.aliasTitular || "";
+  enlaceCalendario();
+}
 $("#copyBtn").onclick = async e => {
   const b = e.currentTarget;
   try { await navigator.clipboard.writeText(B.alias); }
@@ -183,7 +187,7 @@ if (API.demo()) document.body.insertAdjacentHTML("beforeend", '<div class="demo-
 })();
 
 // ---------- agregar al calendario ----------
-(function () {
+function enlaceCalendario() {
   const fin = new Date(fecha.getTime() + (B.duracionHoras || 5) * 36e5);
   const z = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
   const titulo = `Boda de ${B.novia} & ${B.novio}`, donde = [B.lugar, B.direccion, B.ciudad].filter(Boolean).join(", ");
@@ -195,7 +199,9 @@ if (API.demo()) document.body.insertAdjacentHTML("beforeend", '<div class="demo-
   } else {
     $("#calBtn").href = "https://calendar.google.com/calendar/render?" + new URLSearchParams({ action: "TEMPLATE", text: titulo, dates: z(fecha) + "/" + z(fin), location: donde, details: "Ubicación: " + B.mapa });
   }
-})();
+}
+
+pintarTextos();
 
 // ---------- cuenta regresiva ----------
 function tick() {
@@ -214,11 +220,17 @@ function pintarItinerario(it) {
     ? `<ul class="tl">${it.map(x => `<li><time>${esc(x.hora || "")}</time><div><b>${esc(x.titulo)}</b>${x.detalle ? `<small>${esc(x.detalle)}</small>` : ""}</div></li>`).join("")}</ul>`
     : `<p class="pronto">Muy pronto vamos a compartir el itinerario de la noche.</p>`;
 }
-if (B.mostrarItinerario === false) $("#secItin").remove();
-else {
-pintarItinerario(B.itinerario);
-API.config().then(c => { if (c && Array.isArray(c.itinerario)) pintarItinerario(c.itinerario); }).catch(() => { });
+if (B.mostrarItinerario === false) $("#secItin").remove(); else pintarItinerario(B.itinerario);
+
+// ---------- configuración del panel (textos editados e itinerario) ----------
+// Se aplica primero la última guardada en este celular, para que casi no se vea el texto viejo.
+function aplicarConfig(c) {
+  if (!c) return;
+  if (c.textos) { API.aplicarTextos(B, c.textos, ORIG); pintarTextos(); }
+  if ($("#secItin") && Array.isArray(c.itinerario)) pintarItinerario(c.itinerario);
 }
+try { aplicarConfig(JSON.parse(localStorage.getItem("boda_cfg_cache"))); } catch { }
+API.config().then(c => { aplicarConfig(c); try { localStorage.setItem("boda_cfg_cache", JSON.stringify(c)); } catch { } }).catch(() => { });
 
 // ---------- música ----------
 const bgm = new Audio(); bgm.loop = true; bgm.volume = .75; bgm.preload = "none";

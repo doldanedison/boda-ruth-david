@@ -10,6 +10,8 @@ const SHEET_ID = "";            // vacío = la planilla que contiene este script
 const NOMBRE_PLANILLA = "Invitados Boda Ruth y David";
 const HOJA = "Invitados";
 const HOJA_CFG = "Config";
+// Textos de la invitación que se pueden cambiar desde el panel del organizador
+const TEXTOS_EDITABLES = ["frase", "mensaje", "invitacion", "lugar", "direccion", "ciudad", "mapa", "vestimenta", "regalos", "aliasMostrar", "aliasTitular", "confirmarAntes"];
 const COLS = ["id", "nombre", "telefono", "acompanantes", "asistiran", "estado", "mensaje", "actualizado", "integrantes", "quienes"];
 const TITULOS = ["ID", "Nombre", "Teléfono", "Acompañantes", "Asistirán", "Estado", "Mensaje", "Actualizado", "Integrantes (nombres)", "Quiénes asisten"];
 
@@ -266,24 +268,43 @@ function hojaCfg() {
 
 function leerConfig() {
   const v = hojaCfg().getDataRange().getValues().slice(1);
-  const cfg = { itinerario: null };
-  v.forEach(r => { if (r[0] === "itinerario") { try { cfg.itinerario = JSON.parse(r[1]); } catch (e) { } } });
+  const cfg = { itinerario: null, textos: null };
+  v.forEach(r => { if (r[0] in cfg) { try { cfg[r[0]] = JSON.parse(r[1]); } catch (e) { } } });
   return cfg;
 }
 
+// Guarda solo lo que viene en el pedido: itinerario, textos, o los dos.
 function guardarConfig(p) {
-  let it = JSON.parse(p.itinerario || "[]");
-  if (!Array.isArray(it)) throw new Error("Itinerario inválido");
-  it = it.slice(0, 30).map(x => ({
-    hora: String(x.hora || "").trim().slice(0, 10),
-    titulo: String(x.titulo || "").trim().slice(0, 80),
-    detalle: String(x.detalle || "").trim().slice(0, 140)
-  })).filter(x => x.titulo);
+  const res = { ok: true }, cambios = [];
+  if (p.itinerario !== undefined) {
+    let it = JSON.parse(p.itinerario || "[]");
+    if (!Array.isArray(it)) throw new Error("Itinerario inválido");
+    it = it.slice(0, 30).map(x => ({
+      hora: String(x.hora || "").trim().slice(0, 10),
+      titulo: String(x.titulo || "").trim().slice(0, 80),
+      detalle: String(x.detalle || "").trim().slice(0, 140)
+    })).filter(x => x.titulo);
+    cambios.push(["itinerario", it]); res.itinerario = it;
+  }
+  if (p.textos !== undefined) {
+    const o = JSON.parse(p.textos || "{}");
+    if (!o || typeof o !== "object" || Array.isArray(o)) throw new Error("Textos inválidos");
+    const t = {};
+    TEXTOS_EDITABLES.forEach(k => {
+      if (o[k] === undefined) return;
+      const v = String(o[k]).trim().slice(0, 600);
+      if (k === "mapa" && v && !/^https:\/\//.test(v)) throw new Error("El enlace del mapa tiene que empezar con https://");
+      t[k] = v;
+    });
+    cambios.push(["textos", t]); res.textos = t;
+  }
+  if (!cambios.length) throw new Error("No hay nada para guardar");
   return conLock(() => {
     const sh = hojaCfg(), v = sh.getDataRange().getValues();
-    const i = v.findIndex(r => r[0] === "itinerario");
-    const txt = JSON.stringify(it);
-    if (i >= 0) sh.getRange(i + 1, 2).setValue(txt); else sh.appendRow(["itinerario", txt]);
-    return { ok: true, itinerario: it };
+    cambios.forEach(([clave, valor]) => {
+      const i = v.findIndex(r => r[0] === clave), txt = JSON.stringify(valor);
+      if (i >= 0) sh.getRange(i + 1, 2).setValue(txt); else { sh.appendRow([clave, txt]); v.push([clave, txt]); }
+    });
+    return res;
   });
 }

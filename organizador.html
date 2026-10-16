@@ -7,7 +7,7 @@
 <title>Invitados · Boda de Ruth &amp; David</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%231f2c4c'/><text x='50' y='66' text-anchor='middle' font-family='Georgia,serif' font-size='44' fill='%23e6c988'>R·D</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261016a">
+<link rel="stylesheet" href="styles.css?v=20261016b">
 <style>
   .top{background:linear-gradient(170deg,#243459,var(--navy-d));color:#fff;padding:24px 18px 20px;border-radius:0 0 26px 26px}
   .top h1{font-size:27px;font-weight:600}.top p{opacity:.85;font-size:13px;margin-top:2px}
@@ -41,13 +41,27 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="config.js?v=20261016a"></script>
-<script src="api.js?v=20261016a"></script>
+<script src="config.js?v=20261016b"></script>
+<script src="api.js?v=20261016b"></script>
 <script>
 const B = window.BODA, $ = s => document.querySelector(s), app = $("#app");
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-let clave = "", lista = [], itin = [], filtro = "TODOS", texto = "";
+let clave = "", lista = [], itin = [], textos = {}, borrador = null, filtro = "TODOS", texto = "";
+const ORIG = Object.assign({}, B);
 try { clave = sessionStorage.getItem("boda_clave") || ""; } catch { }
+
+const CAMPOS = [
+  ["frase", "Frase arriba del sobre (vacío = sin frase)", 1],
+  ["mensaje", "Mensaje de bienvenida", 3],
+  ["invitacion", "Invitación", 2],
+  ["lugar", "Lugar", 1], ["direccion", "Dirección", 1], ["ciudad", "Ciudad", 1],
+  ["mapa", "Enlace de Google Maps", 1],
+  ["vestimenta", "Vestimenta", 1],
+  ["regalos", "Texto de regalos", 3],
+  ["aliasMostrar", "Alias (vacío = sin alias)", 1], ["aliasTitular", "Titular de la cuenta (opcional)", 1],
+  ["confirmarAntes", "Aviso del plazo para confirmar", 2]
+];
+const valorTexto = k => (k in textos ? textos[k] : ORIG[k]) ?? "";
 
 function login(msg = "") {
   app.innerHTML = `
@@ -68,6 +82,7 @@ function login(msg = "") {
 async function cargar() {
   const [l, c] = await Promise.all([API.listar(clave), API.config().catch(() => ({ itinerario: null }))]);
   lista = l; itin = Array.isArray(c.itinerario) ? c.itinerario : (B.itinerario || []);
+  textos = c.textos || {}; borrador = null;
   render();
 }
 
@@ -112,6 +127,16 @@ function render() {
         <p class="muted" style="margin:8px 0">Una invitación por línea: <b>Titular; acompañantes con nombre; cantidad</b>. Las dos últimas partes son opcionales.</p>
         <textarea class="bulk" id="bulk" placeholder="María González&#10;Carlos Benítez; Ana Benítez, Luis Benítez&#10;Familia Rojas; ; 3"></textarea>
         <button class="btn-sm" id="bk">Agregar todas</button>
+      </details>
+    </div>
+
+    <div class="pbox">
+      <details><summary><h2 style="display:inline">Textos de la invitación</h2></summary>
+        <p class="muted" style="margin:10px 0">Lo que guardes acá lo ven los invitados enseguida. La fecha y la hora no se cambian desde acá porque mueven el calendario y la cuenta regresiva.</p>
+        <div id="txs"></div>
+        <div id="txAviso"></div>
+        <button type="button" class="btn-sm" id="txSave">Guardar textos</button>
+        <button type="button" class="link" id="txOrig">Volver a los textos originales</button>
       </details>
     </div>
 
@@ -170,6 +195,28 @@ function render() {
     try { await API.importar(clave, rows, (h, t) => $("#bk").textContent = `Guardando… ${h}/${t}`); await cargar(); }
     catch (err) { alert(err.message + "\n\nRevisá la lista antes de volver a cargar, por si una parte ya quedó guardada."); try { await cargar(); } catch { } }
   };
+
+  // ---- textos de la invitación ----
+  if (!borrador) { borrador = {}; CAMPOS.forEach(([k]) => borrador[k] = valorTexto(k)); }
+  $("#txs").innerHTML = CAMPOS.map(([k, et, filas]) => `<label class="lbl" style="margin-top:10px" for="tx_${k}">${esc(et)}</label>` +
+    (filas > 1 ? `<textarea id="tx_${k}" data-k="${k}" rows="${filas}">${esc(borrador[k])}</textarea>` : `<input type="text" id="tx_${k}" data-k="${k}" value="${esc(borrador[k])}">`)).join("");
+  $("#txs").querySelectorAll("[data-k]").forEach(i => i.oninput = () => { borrador[i.dataset.k] = i.value; });
+  const guardarTextos = async (nuevos, msgOk) => {
+    const b = $("#txSave"); b.disabled = true; b.textContent = "Guardando…"; $("#txAviso").innerHTML = "";
+    try {
+      const r = await API.guardarConfig(clave, { textos: nuevos });
+      textos = r.textos || nuevos; borrador = null; CAMPOS.forEach(([k]) => { const e = $("#tx_" + k); if (e) e.value = valorTexto(k); });
+      $("#txAviso").innerHTML = `<div class="msg ok">${msgOk}</div>`;
+    } catch (err) { $("#txAviso").innerHTML = `<div class="msg err">${esc(err.message)}</div>`; }
+    b.disabled = false; b.textContent = "Guardar textos";
+  };
+  $("#txSave").onclick = () => {
+    // solo se guardan los que cambiaron respecto de config.js
+    const nuevos = {}; CAMPOS.forEach(([k]) => { const v = (borrador[k] ?? "").trim(); if (v !== String(ORIG[k] ?? "").trim()) nuevos[k] = v; });
+    if (nuevos.mapa && !/^https:\/\//.test(nuevos.mapa)) { $("#txAviso").innerHTML = '<div class="msg err">El enlace del mapa tiene que empezar con https://</div>'; return; }
+    guardarTextos(nuevos, "Textos guardados. Los invitados ya ven la versión nueva (si alguien tiene la invitación abierta, al recargarla).");
+  };
+  $("#txOrig").onclick = () => { if (confirm("¿Volver a los textos originales? Se pierden los cambios hechos desde el panel.")) guardarTextos({}, "Listo: la invitación volvió a los textos originales."); };
 
   // ---- itinerario ----
   if (B.mostrarItinerario === false) $("#boxItin").remove(); else {
