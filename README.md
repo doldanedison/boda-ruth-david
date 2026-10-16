@@ -16,7 +16,8 @@
 
 ## Cambiar datos
 
-- **Textos, fecha, lugar, alias**: editá `config.js`.
+- **Textos** (mensaje, invitación, lugar, mapa, vestimenta, regalos, alias, plazo, frase del sobre): desde el panel del organizador, sección «Textos de la invitación». Lo guardado ahí tiene prioridad sobre `config.js`; «Volver a los textos originales» vuelve a los de `config.js`.
+- **Fecha y hora**: solo en `config.js` (`fechaISO`, `fechaTexto`, `horaTexto`), porque mueven el calendario y la cuenta regresiva.
 - **Itinerario**: hoy está oculto (`mostrarItinerario: false` en `config.js`). Si se activa, se edita desde el panel del organizador, sin tocar archivos. Mientras esté vacío, los invitados ven «Muy pronto vamos a compartir el itinerario».
 - **Música**: subí el archivo con el nombre `musica.mp3`.
 
