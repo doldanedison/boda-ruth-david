@@ -12,7 +12,7 @@ window.BODA = {
 
   fechaISO: "2026-11-15T18:00:00-03:00",
   fechaTexto: "Domingo 15 de noviembre de 2026",
-  horaTexto: "18:00 hs",
+  horaTexto: "18:00 h",
   duracionHoras: 6,                       // para el botón "Agregar a mi calendario"
 
   lugar: "Star Recepciones",
@@ -22,7 +22,7 @@ window.BODA = {
 
   vestimenta: "Elegante",
 
-  confirmarAntes: "Agradecemos confirmar su asistencia antes del 30 de octubre",
+  confirmarAntes: "Agradecemos que confirmes tu asistencia antes del 30 de octubre",
 
   regalos: "Lo más importante para nosotros es tu presencia. Si además querés hacernos un regalo, podés hacerlo con una transferencia a este alias:",
   alias: "4318607",                       // lo que se copia
